@@ -1,11 +1,12 @@
 const displayINRCurrency = (num) => {
-    const formatter = new Intl.NumberFormat('en-IN',{
-        style : "currency",
-        currency : 'INR',
-        minimumFractionDigits : 2
-    })
+const formatter = new Intl.NumberFormat('en-NG', {
+style: "currency",
+currency: 'NGN',
+minimumFractionDigits: 2,
+maximumFractionDigits: 2
+})
 
-    return formatter.format(num)
+return formatter.format(num)
 
 }
 
