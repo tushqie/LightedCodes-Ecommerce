@@ -39,17 +39,36 @@ const AdminEditProduct = ({
       })
   }
 
-  const handleUploadProduct = async(e) => {
+ const handleUploadProduct = async (e) => {
     const file = e.target.files[0]
-    const uploadImageCloudinary = await uploadImage(file)
 
-    setData((preve)=>{
-      return{
-        ...preve,
-        productImage : [ ...preve.productImage, uploadImageCloudinary.url]
-      }
-    })
-  }
+  // alert("Upload handler triggered. File: " + (file ? file.name : "No file selected"))
+
+    if (!file) return
+
+    try {
+        const uploadImageCloudinary = await uploadImage(file)
+
+       // console.log("Cloudinary response:", uploadImageCloudinary)
+//alert(JSON.stringify(uploadImageCloudinary))
+
+        setData((prev) => ({
+            ...prev,
+            productImage: [
+                ...prev.productImage.filter(Boolean),
+                uploadImageCloudinary.secure_url
+            ]
+        }))
+
+        toast.success("Image uploaded successfully")
+
+    } catch (error) {
+        console.error("Image upload error:", error)
+        toast.error(error.message || "Image upload failed")
+    }
+
+    e.target.value = ""
+} 
 
   const handleDeleteProductImage = async(index)=>{
     console.log("image index",index)
