@@ -13,6 +13,7 @@ const VerticalCardProduct = ({category, heading}) => {
 
     const [scroll,setScroll] = useState(0)
     const scrollElement = useRef()
+    const [canScroll, setCanScroll] = useState(false)
 
     const { fetchUserAddToCart } = useContext(Context)
 
@@ -33,6 +34,28 @@ const VerticalCardProduct = ({category, heading}) => {
     useEffect(()=>{
         fetchData()
     },[])
+
+
+    // Check whether products require horizontal scrolling
+useEffect(() => {
+    const checkScroll = () => {
+        if (scrollElement.current) {
+            setCanScroll(
+                scrollElement.current.scrollWidth >
+                scrollElement.current.clientWidth
+            )
+        }
+    }
+
+    checkScroll()
+
+    window.addEventListener('resize', checkScroll)
+
+    return () => {
+        window.removeEventListener('resize', checkScroll)
+    }
+}, [data, loading])
+  
 
     // Hide the entire category section when no products exist
 if (!loading && (!Array.isArray(data) || data.length === 0)) {
@@ -55,8 +78,23 @@ if (!loading && (!Array.isArray(data) || data.length === 0)) {
                 
            <div className='flex items-center gap-4 md:gap-6 overflow-x-scroll scrollbar-none transition-all' ref={scrollElement}>
 
-            <button  className='bg-white shadow-md rounded-full p-1 absolute left-0 text-lg hidden md:block' onClick={scrollLeft}><FaAngleLeft/></button>
-            <button  className='bg-white shadow-md rounded-full p-1 absolute right-0 text-lg hidden md:block' onClick={scrollRight}><FaAngleRight/></button> 
+            {canScroll && (
+    <>
+        <button
+            className='bg-white shadow-md rounded-full p-1 absolute left-0 text-lg hidden md:block'
+            onClick={scrollLeft}
+        >
+            <FaAngleLeft />
+        </button>
+
+        <button
+            className='bg-white shadow-md rounded-full p-1 absolute right-0 text-lg hidden md:block'
+            onClick={scrollRight}
+        >
+            <FaAngleRight />
+        </button>
+    </>
+)}
 
            {
 
