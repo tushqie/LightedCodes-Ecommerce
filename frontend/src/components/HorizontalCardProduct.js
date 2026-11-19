@@ -35,6 +35,11 @@ const HorizontalCardProduct = ({category, heading}) => {
         fetchData()
     },[])
 
+    // Hide the entire category section when no products exist
+if (!loading && (!Array.isArray(data) || data.length === 0)) {
+    return null
+}
+
     const scrollRight = () =>{
         scrollElement.current.scrollLeft += 300
     }
